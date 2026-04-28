@@ -11,11 +11,24 @@ public class Player : MonoBehaviour
 	[SerializeField] private Transform _rayStartPoint = null;
 	[SerializeField] private float _rayDistance = 1f;
 
+
+    [SerializeField] private WishemonCard _card = null;
+    [SerializeField] private Wishemon _wishemon = null;
+
+
 	private void Update()
 	{
 		UpdateMovement();
 		UpdateInteraction();
 	}
+
+    
+    private void Start()
+    {
+        Debug.Log("starting game with card " + _card.Prefab);
+        
+        _wishemon.SpawnWishemon(_card);
+    }
 
 	private void UpdateMovement()
 	{
@@ -58,7 +71,7 @@ public class Player : MonoBehaviour
 			Ray ray = new Ray(_rayStartPoint.position, _rayStartPoint.forward);
 			if (Physics.Raycast(ray, _rayDistance))
 			{
-				Debug.Log("Touché");
+				Debug.Log("Touchï¿½");
 			}
 		}
 	}

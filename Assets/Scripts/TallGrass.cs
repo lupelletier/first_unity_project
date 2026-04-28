@@ -15,9 +15,12 @@ public class TallGrass : MonoBehaviour
 			_timer -= Time.deltaTime;
 
 			// If the timer reaches zero, the player is attacked 
-			if (_timer == 0f)
+			if (_timer <= 0f)
 			{
-				Debug.Log("Aggro");
+				Debug.Log("Dead");
+				// Reset the timer to a random value between min and max aggro time for the next attack
+				_timer = Random.Range(_minAggroTime, _maxAggroTime);
+				Debug.Log("Player attacked in tall grass, timer reset to " + _timer);
 			}
 		}
 

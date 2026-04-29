@@ -7,6 +7,9 @@ public class TallGrass : MonoBehaviour
 	[SerializeField] private float _maxAggroTime = 5f;
 	private bool _isPlayerInside = false;
 
+	[SerializeField] private WishemonCard[] _possibleEnemies;
+	[SerializeField] private BattleManager _battleManager;
+
 	private void Update()
 	{
 		if (_isPlayerInside)
@@ -14,13 +17,15 @@ public class TallGrass : MonoBehaviour
 			// Decrease the timer by the time elapsed since the last frame after entering the tall grass
 			_timer -= Time.deltaTime;
 
-			// If the timer reaches zero, the player is attacked 
+			// If the timer reaches zero, the player is attacked
 			if (_timer <= 0f)
 			{
-				Debug.Log("Dead");
-				// Reset the timer to a random value between min and max aggro time for the next attack
+				if (_possibleEnemies.Length > 0 && _battleManager != null && !_battleManager.IsBattleActive)
+				{
+					WishemonCard enemy = _possibleEnemies[Random.Range(0, _possibleEnemies.Length)];
+					_battleManager.TriggerEncounter(enemy);
+				}
 				_timer = Random.Range(_minAggroTime, _maxAggroTime);
-				Debug.Log("Player attacked in tall grass, timer reset to " + _timer);
 			}
 		}
 
@@ -52,5 +57,11 @@ public class TallGrass : MonoBehaviour
 			_isPlayerInside = false;
 			_timer = 0f;
 		}
+	}
+
+	public void ForceExit()
+	{
+		_isPlayerInside = false;
+		_timer = 0f;
 	}
 }

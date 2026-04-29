@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56ed7985e059a40488c2be1fedf169ae, type: 3}
-  m_Name: Chicken
+  m_Name: Yeti
   m_EditorClassIdentifier: Assembly-CSharp::WishemonCard
-  _name: chicken
-  _prefab: {fileID: 5137741187893313276, guid: f01f228851a9445fa89d37782abffbfb, type: 3}
-  _pv: 100
-  _attack: 20
+  _name: yeti
+  _prefab: {fileID: 900951046456246423, guid: 87cb27434ed944e67a5220925c9ab12a, type: 3}
+  _pv: 80
+  _attack: 10
   _defense: 10

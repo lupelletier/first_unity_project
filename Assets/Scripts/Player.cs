@@ -12,12 +12,29 @@ public class Player : MonoBehaviour
 	[SerializeField] private float _rayDistance = 1f;
 
 
-    [SerializeField] private WishemonCard _card = null;
+	[SerializeField] private WishemonCard[] _team;
     [SerializeField] private Wishemon _wishemon = null;
 
 
+	private bool _movementEnabled = true;
+
+	public WishemonCard[] Team => _team;
+
+	public void SetMovementEnabled(bool enabled)
+	{
+		_movementEnabled = enabled;
+	}
+
+	public void Teleport(Vector3 position)
+	{
+		_controller.enabled = false;
+		transform.position = position;
+		_controller.enabled = true;
+	}
+
 	private void Update()
 	{
+		if (!_movementEnabled) return;
 		UpdateMovement();
 		UpdateInteraction();
 	}
@@ -25,9 +42,8 @@ public class Player : MonoBehaviour
     
     private void Start()
     {
-        Debug.Log("starting game with card " + _card.Prefab);
-        
-        _wishemon.SpawnWishemon(_card);
+        if (_team != null && _team.Length > 0)
+            _wishemon.SpawnWishemon(_team[0]);
     }
 
 	private void UpdateMovement()
@@ -51,7 +67,7 @@ public class Player : MonoBehaviour
 			}
 			else if (move.y <= -0.1f)
 			{
-				// base
+				// bas
 				transform.rotation = Quaternion.Euler(0f, 180f, 0f);
 			}
 			else if (move.x <= -0.1f)

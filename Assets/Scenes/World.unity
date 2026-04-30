@@ -6471,7 +6471,7 @@ MonoBehaviour:
   opponentSpawnPoint: {fileID: 1118097157}
   battleCamera: {fileID: 693923584}
   explorationCamera: {fileID: 961739752}
-  battleMusic: {fileID: 0}
+  battleMusic: {fileID: 8300000, guid: 65d5a3bc064774ae7b83fc2a4d4b4b4d, type: 3}
 --- !u!4 &557510910
 Transform:
   m_ObjectHideFlags: 0
@@ -12412,8 +12412,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 917811870084648cca0e0d21a953a94c, type: 2}
   - {fileID: 11400000, guid: d370b8f6bd33d4934b899585b83d77ae, type: 2}
   _musicSource: {fileID: 0}
-  _defaultBattleMusic: {fileID: 0}
-  _explorationMusic: {fileID: 0}
+  _ambientMusic: {fileID: 8300000, guid: befd36326a94d4530873c6a91d42d668, type: 3}
+  _mainThemeMusic: {fileID: 8300000, guid: befd36326a94d4530873c6a91d42d668, type: 3}
+  _defaultBattleMusic: {fileID: 8300000, guid: 65d5a3bc064774ae7b83fc2a4d4b4b4d, type: 3}
+  _explorationMusic: {fileID: 8300000, guid: befd36326a94d4530873c6a91d42d668, type: 3}
 --- !u!4 &990315903
 Transform:
   m_ObjectHideFlags: 0

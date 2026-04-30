@@ -12,6 +12,8 @@ public class BattleManager : MonoBehaviour
 	[SerializeField] private Transform _safePoint;
 	[SerializeField] private WishemonCard[] _possibleEnemies;
 	[SerializeField] private AudioSource _musicSource;
+	[SerializeField] private AudioClip _ambientMusic;
+	[SerializeField] private AudioClip _mainThemeMusic;
 	[SerializeField] private AudioClip _defaultBattleMusic;
 	[SerializeField] private AudioClip _explorationMusic;
 
@@ -35,6 +37,14 @@ public class BattleManager : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
+		if (_musicSource == null)
+			_musicSource = GetComponent<AudioSource>();
+	}
+
+	private void Start()
+	{
+		ValidateMusicSetup();
+		PlayAmbientMusic();
 	}
 
 	public bool TriggerEncounter(WishemonCard enemyCard, BattleArena battleArenaOverride = null, Transform postCombatSpawnOverride = null)
@@ -109,8 +119,35 @@ public class BattleManager : MonoBehaviour
 		if (_musicSource.clip != encounterClip)
 		{
 			_musicSource.clip = encounterClip;
+			_musicSource.loop = true;
+			_musicSource.spatialBlend = 0f;
 			_musicSource.Play();
 		}
+	}
+
+	private void PlayAmbientMusic()
+	{
+		if (_musicSource == null)
+			return;
+
+		AudioClip ambientClip = ResolveAmbientMusic();
+		if (ambientClip == null)
+			return;
+
+		if (!_musicWasSwitched)
+		{
+			_previousMusic = _musicSource.clip;
+		}
+
+		if (_musicSource.clip != ambientClip)
+		{
+			_musicSource.clip = ambientClip;
+			_musicSource.loop = true;
+			_musicSource.spatialBlend = 0f;
+			_musicSource.Play();
+		}
+
+		_musicWasSwitched = false;
 	}
 
 	private void RestoreExplorationMusic()
@@ -118,15 +155,48 @@ public class BattleManager : MonoBehaviour
 		if (_musicSource == null || !_musicWasSwitched)
 			return;
 
-		AudioClip restoreClip = _explorationMusic != null ? _explorationMusic : _previousMusic;
+		AudioClip restoreClip = ResolveAmbientMusic();
+		if (restoreClip == null)
+			restoreClip = _previousMusic;
 		if (restoreClip != null && _musicSource.clip != restoreClip)
 		{
 			_musicSource.clip = restoreClip;
+			_musicSource.loop = true;
+			_musicSource.spatialBlend = 0f;
 			_musicSource.Play();
 		}
 
 		_previousMusic = null;
 		_musicWasSwitched = false;
+	}
+
+	private AudioClip ResolveAmbientMusic()
+	{
+		if (_ambientMusic != null)
+			return _ambientMusic;
+
+		if (_mainThemeMusic != null)
+			return _mainThemeMusic;
+
+		return _explorationMusic;
+	}
+
+	private void ValidateMusicSetup()
+	{
+		if (_musicSource == null)
+		{
+			Debug.LogWarning("BattleManager has no AudioSource assigned, so music cannot play.", this);
+			return;
+		}
+
+		if (_musicSource.volume <= 0f)
+			Debug.LogWarning("BattleManager AudioSource volume is 0, so music will be silent.", this);
+
+		if (!_musicSource.enabled)
+			Debug.LogWarning("BattleManager AudioSource is disabled, so music will not play.", this);
+
+		if (_musicSource.clip == null && _ambientMusic == null && _mainThemeMusic == null && _defaultBattleMusic == null && _explorationMusic == null)
+			Debug.LogWarning("BattleManager has no music clips assigned. Set Main Theme / Ambient / Combat music in the inspector.", this);
 	}
 
 	private WishemonCard GetRandomFallbackEnemy()

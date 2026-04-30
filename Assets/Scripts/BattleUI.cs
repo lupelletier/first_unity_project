@@ -66,6 +66,12 @@ public class BattleUI : MonoBehaviour
 		_battleLogText.text += msg;
 	}
 
+	public void SetButtonsInteractable(bool interactable)
+	{
+		_attackButton.interactable = interactable;
+		_runButton.interactable = interactable;
+	}
+
 	public void ShowEndMessage(string msg)
 	{
 		_battleLogText.text = msg;

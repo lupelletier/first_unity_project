@@ -42,8 +42,17 @@ public class BattleArena : MonoBehaviour
 	public void PlayEnemyAttack()  => TrySetTrigger(_spawnedEnemy,  "Attack");
 	public void PlayEnemyDeath()   => TrySetTrigger(_spawnedEnemy,  "Death");
 	public void PlayPlayerDeath()  => TrySetTrigger(_spawnedPlayer, "Death");
-	public void PlayPlayerHit()    => StartCoroutine(FlashHit(_spawnedPlayer));
-	public void PlayEnemyHit()     => StartCoroutine(FlashHit(_spawnedEnemy));
+	public void PlayPlayerHit()
+	{
+		TrySetTrigger(_spawnedPlayer, "Hit");
+		StartCoroutine(FlashHit(_spawnedPlayer));
+	}
+
+	public void PlayEnemyHit()
+	{
+		TrySetTrigger(_spawnedEnemy, "Hit");
+		StartCoroutine(FlashHit(_spawnedEnemy));
+	}
 
 	private void TrySetTrigger(GameObject go, string triggerName)
 	{

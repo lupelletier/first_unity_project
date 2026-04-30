@@ -1684,6 +1684,7 @@ Transform:
   m_Children:
   - {fileID: 926996165}
   - {fileID: 970772538}
+  - {fileID: 2101318062}
   - {fileID: 1478425165}
   - {fileID: 294723253}
   m_Father: {fileID: 0}
@@ -7154,7 +7155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.5882353}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -10304,6 +10305,7 @@ MonoBehaviour:
   _teamSelectionUI: {fileID: 1814293387}
   _battleUI: {fileID: 712879684}
   _battleArena: {fileID: 135243945}
+  _safePoint: {fileID: 2101318062}
 --- !u!4 &990315903
 Transform:
   m_ObjectHideFlags: 0
@@ -22429,6 +22431,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2266188758853475154, guid: fe2b65f5f7b6c8f42bee035bbf524cc1, type: 3}
   m_PrefabInstance: {fileID: 497213473}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2101318061
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2101318062}
+  m_Layer: 0
+  m_Name: SafeSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2101318062
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101318061}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.35, y: 0, z: -8.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 135243946}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2102403094
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22805,8 +22838,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TallGrass
   _minAggroTime: 1
   _maxAggroTime: 5
-  _possibleEnemies: []
-  _battleManager: {fileID: 0}
+  _possibleEnemies:
+  - {fileID: 11400000, guid: a2ee35aa782b44f03848dacd7394ecfd, type: 2}
+  - {fileID: 11400000, guid: d370b8f6bd33d4934b899585b83d77ae, type: 2}
+  _battleManager: {fileID: 990315902}
 --- !u!1001 &2129541842
 PrefabInstance:
   m_ObjectHideFlags: 0

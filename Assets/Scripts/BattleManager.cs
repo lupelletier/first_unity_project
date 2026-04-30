@@ -42,11 +42,16 @@ public class BattleManager : MonoBehaviour
 
 	public void OnAttackPressed()
 	{
-		Debug.Log($"[BattleManager] OnAttackPressed called. State = {_state}");
 		if (_state != BattleState.Fighting) return;
+		StartCoroutine(AttackSequence());
+	}
 
+	private IEnumerator AttackSequence()
+	{
+		_battleUI.SetButtonsInteractable(false);
+
+		// Player attacks
 		_battleArena.PlayPlayerAttack();
-
 		int dmg = Mathf.Max(1, _playerCard.Attack - _enemyCard.Defense);
 		_enemyCurrentHP -= dmg;
 		_battleArena.PlayEnemyHit();
@@ -55,24 +60,32 @@ public class BattleManager : MonoBehaviour
 
 		if (_enemyCurrentHP <= 0)
 		{
+			yield return new WaitForSeconds(1f);
 			_battleArena.PlayEnemyDeath();
 			EndBattle($"You defeated {_enemyCard.Name}!", won: true);
-			return;
+			yield break;
 		}
 
-		_battleArena.PlayEnemyAttack();
+		// Pause before enemy turn
+		yield return new WaitForSeconds(1f);
 
+		// Enemy attacks
+		_battleArena.PlayEnemyAttack();
 		int enemyDmg = Mathf.Max(1, _enemyCard.Attack - _playerCard.Defense);
 		_playerCurrentHP -= enemyDmg;
 		_battleArena.PlayPlayerHit();
-		_battleUI.AppendBattleLog($"\n{_enemyCard.Name} dealt {enemyDmg} damage!");
+		_battleUI.SetBattleLog($"{_enemyCard.Name} dealt {enemyDmg} damage!");
 		_battleUI.UpdatePlayerHP(_playerCurrentHP, _playerCard.PV);
 
 		if (_playerCurrentHP <= 0)
 		{
+			yield return new WaitForSeconds(1f);
 			_battleArena.PlayPlayerDeath();
 			EndBattle("You were defeated...", won: false);
+			yield break;
 		}
+
+		_battleUI.SetButtonsInteractable(true);
 	}
 
 	public void OnRunPressed()

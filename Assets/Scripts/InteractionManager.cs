@@ -35,6 +35,9 @@ public class InteractionManager : MonoBehaviour
 			dialogText.text = pnj.npcName + ": " + line;
 		}
 		_activePlayer?.SetMovementEnabled(false);
+		// Override dialogue camera if the PNJ has a custom one assigned.
+		if (pnj.dialogueCamera != null)
+			cameraController?.SetDialogueCamera(pnj.dialogueCamera);
 		cameraController?.ShowDialogue(player != null ? player.transform : null, pnj.transform);
 	}
 

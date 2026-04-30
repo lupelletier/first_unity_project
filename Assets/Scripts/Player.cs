@@ -25,6 +25,17 @@ public class Player : MonoBehaviour
 		_movementEnabled = enabled;
 	}
 
+	// Hide or show player visual components (animator and renderers) while keeping scripts active.
+	public void SetVisible(bool visible)
+	{
+		if (_animator != null)
+			_animator.enabled = visible;
+
+		Renderer[] renderers = GetComponentsInChildren<Renderer>(includeInactive: true);
+		foreach (var r in renderers)
+			r.enabled = visible;
+	}
+
 	public void Teleport(Vector3 position)
 	{
 		_controller.enabled = false;

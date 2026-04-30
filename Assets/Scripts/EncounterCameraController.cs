@@ -8,6 +8,9 @@ public class EncounterCameraController : MonoBehaviour
 	[SerializeField] private Camera _dialogueCamera;
 	[SerializeField] private Camera _battleCamera;
 	[SerializeField] private float _cameraBlendSpeed = 6f;
+	[SerializeField] private bool _useFixedDialogueCamera = true; // If true, dialogue camera keeps its inspector position; if false, it auto-frames player and target.
+
+	private Camera _defaultDialogueCamera; // Store the default to restore after per-PNJ overrides.
 	[SerializeField] private Vector3 _dialogueOffset = new Vector3(0f, 1.8f, -3f);
 	[SerializeField] private Vector3 _battleOffset = new Vector3(0f, 2.2f, -6f);
 
@@ -20,12 +23,13 @@ public class EncounterCameraController : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
+		_defaultDialogueCamera = _dialogueCamera;
 		SetModeExploration();
 	}
 
 	private void LateUpdate()
 	{
-		if (_isDialogueActive && _dialogueCamera != null && _dialoguePlayer != null && _dialogueTarget != null)
+		if (_isDialogueActive && _dialogueCamera != null && _dialoguePlayer != null && _dialogueTarget != null && !_useFixedDialogueCamera)
 		{
 			Vector3 midpoint = (_dialoguePlayer.position + _dialogueTarget.position) * 0.5f;
 			Vector3 desiredPosition = midpoint + _dialogueOffset;
@@ -65,7 +69,15 @@ public class EncounterCameraController : MonoBehaviour
 		_dialoguePlayer = null;
 		_dialogueTarget = null;
 		_battleTarget = null;
+		_dialogueCamera = _defaultDialogueCamera; // Restore default dialogue camera
 		SetOnlyCameraActive(_explorationCamera);
+	}
+
+	// Temporarily override the dialogue camera for a specific interaction (e.g., per-PNJ camera).
+	public void SetDialogueCamera(Camera cam)
+	{
+		if (cam != null)
+			_dialogueCamera = cam;
 	}
 
 	private void SetOnlyCameraActive(Camera activeCamera)

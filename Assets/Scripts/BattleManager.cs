@@ -37,9 +37,9 @@ public class BattleManager : MonoBehaviour
 		Instance = this;
 	}
 
-	public bool TriggerEncounter(WishemonCard enemyCard, BattleArena battleArenaOverride = null)
+	public bool TriggerEncounter(WishemonCard enemyCard, BattleArena battleArenaOverride = null, Transform postCombatSpawnOverride = null)
 	{
-		return _beginEncounter(enemyCard, null, null, null, battleArenaOverride);
+		return _beginEncounter(enemyCard, null, postCombatSpawnOverride, null, battleArenaOverride);
 	}
 
 	public bool TriggerEncounter(PNJ pnj)
@@ -79,6 +79,10 @@ public class BattleManager : MonoBehaviour
 		Debug.Log($"Encounter triggered with {enemyCard.Name}", this);
 		_state = BattleState.TeamSelection;
 		_player.SetMovementEnabled(false);
+		// Hide the player and PNJ visuals for the duration of the battle so only arena-spawned prefabs are visible.
+		_player.SetVisible(false);
+		if (pnj != null)
+			pnj.SetVisible(false);
 		StartBattleMusic();
 		_teamSelectionUI.Show(_player.Team, enemyCard);
 		return true;
@@ -214,7 +218,12 @@ public class BattleManager : MonoBehaviour
 
 		_state = BattleState.Inactive;
 		_player.SetMovementEnabled(true);
-		if (_currentPNJ != null && _currentPostCombatSpawn != null)
+		// Restore visuals
+		_player.SetVisible(true);
+		if (_currentPNJ != null)
+			_currentPNJ.SetVisible(true);
+
+		if (_currentPostCombatSpawn != null)
 			_player.Teleport(_currentPostCombatSpawn.position);
 		else if (_safePoint != null)
 			_player.Teleport(_safePoint.position);
@@ -223,6 +232,7 @@ public class BattleManager : MonoBehaviour
 			tg.ForceExit();
 		_battleUI.ShowEndMessage(resultMessage);
 		StartCoroutine(HideBattleAfterDelay());
+		// exploration camera will be restored after the arena is cleared to avoid camera conflicts
 		_currentPNJ = null;
 		_currentPostCombatSpawn = null;
 		_currentBattleContext = null;
@@ -235,5 +245,8 @@ public class BattleManager : MonoBehaviour
 		if (_currentBattleArena != null)
 			_currentBattleArena.ClearArena();
 		_currentBattleArena = null;
+
+		if (EncounterCameraController.Instance != null)
+			EncounterCameraController.Instance.SetModeExploration();
 	}
 }

@@ -82,12 +82,24 @@ public class Player : MonoBehaviour
 
 	private void UpdateInteraction()
 	{
+		if (InteractionManager.Instance != null && InteractionManager.Instance.IsDialogOpen)
+			return;
+
 		if (_interactRef.action.WasPerformedThisFrame())
 		{
 			Ray ray = new Ray(_rayStartPoint.position, _rayStartPoint.forward);
-			if (Physics.Raycast(ray, _rayDistance))
+			if (Physics.Raycast(ray, out RaycastHit hit, _rayDistance))
 			{
-				Debug.Log("Touch�");
+				var pnj = hit.collider.GetComponentInParent<PNJ>();
+				if (pnj != null)
+				{
+					if (InteractionManager.Instance != null)
+						InteractionManager.Instance.ShowDialog(pnj, this);
+				}
+				else
+				{
+					Debug.Log("Interactable hit, but no PNJ found.");
+				}
 			}
 		}
 	}

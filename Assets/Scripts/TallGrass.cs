@@ -9,6 +9,7 @@ public class TallGrass : MonoBehaviour
 
 	[SerializeField] private WishemonCard[] _possibleEnemies;
 	[SerializeField] private BattleManager _battleManager;
+	[SerializeField] private BattleArena _battleArenaOverride;
 
 	private void Update()
 	{
@@ -23,7 +24,7 @@ public class TallGrass : MonoBehaviour
 				if (_possibleEnemies.Length > 0 && _battleManager != null && !_battleManager.IsBattleActive)
 				{
 					WishemonCard enemy = _possibleEnemies[Random.Range(0, _possibleEnemies.Length)];
-					_battleManager.TriggerEncounter(enemy);
+					_battleManager.TriggerEncounter(enemy, _battleArenaOverride);
 				}
 				_timer = Random.Range(_minAggroTime, _maxAggroTime);
 			}
